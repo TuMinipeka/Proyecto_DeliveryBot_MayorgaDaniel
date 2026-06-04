@@ -66,7 +66,24 @@ Y este da el siguiente mensaje en telegram cuando el flujo termina.
 | 3.6 | Verificar hoja SESSION tras confirmación | `pantalla_actual=VER_CATEGORIAS`, `carrito_temporal={}` | ⬜ Pendiente |
 
 ### Evidencias
-![DEcision de flujo al pulsar /start ](/docs/assets/capturas_modulo_01/flujostartn8n.png)
+Al darle click al boton CONFIRMAR:
+![Despues de oprimir el boton confirmar en telegram este el mesaje de pedido confirmado](assets/capturas_modulo_03/chattelegramconfirmar.png)
+
+Registra el pedido dentro del Google Sheets
+![Tabla de datos del google sheets guardado](assets/capturas_modulo_03/pedidogooglesheets.png)
+
+Junto la pantalla actual en la que se encuentra:
+![Google sheets donde se ve la pantalla actual de session junto sus otros valores](assets/capturas_modulo_03/sheetssession.png)
+
+Si quieres segir comprando, te dara el catalogo para que lo agregues a tu carrito:
+![Ouput telegram al seguir comprando](assets/capturas_modulo_03/seguircomprando.png)
+
+Si no hay suficientes Coca Colas dentro del Stock.
+![Mensaje que envia el flujo por medio del bot de telegram al aver unidades insufucientes dentro del stock](assets/capturas_modulo_03/salida0stock.png)
+
+Al cancelar carrito, este solo te dira que el pedido ha sido canselado.
+
+
 
 ---
 
