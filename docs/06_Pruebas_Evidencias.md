@@ -47,7 +47,7 @@
 | 3.6 | Verificar hoja SESSION tras confirmación | `pantalla_actual=VER_CATEGORIAS`, `carrito_temporal={}` | ⬜ Pendiente |
 
 ### Evidencias
-> Agregar capturas en `docs/assets/capturas_modulo_03/`
+> Agregar capturas en `docs/assets/capturas_modulo_01/flujostartn8n.png`
 
 ---
 

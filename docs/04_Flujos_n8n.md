@@ -60,59 +60,145 @@
 
 ---
 
-## Módulo 03 — Gestor de Estados
+## Módulo 03 — Workflows Secundarios
 
-**Archivo:** `Workflow/modulos/03_Gestor_Estados.json`  
-**Responsabilidad:** Procesamiento de confirmación, validación de stock, registro del pedido, descuento de inventario, cancelación.
+**Archivo:** `Workflow/modulos/03_Gestor_Estados.json`
 
-### Nodos
+Este archivo contiene **tres flujos independientes** que se importan en el mismo canvas de n8n. Cada uno tiene su propio trigger y puede activarse o desactivarse por separado sin afectar a los demás:
 
-| Nodo | Tipo | Descripción |
-|------|------|-------------|
-| `Switch` | Switch | 3 ramas: `CONFIRMAR`, `SEGUIR`, `CANCELAR` por valor de `texto_usuario` |
-| `Lectura stock Actual` | googleSheets (getAll) | Lee todas las filas de MENU sin filtro |
-| `Confirmar Stock + Generar Pedido` | Code | Lee carrito de SESSION, valida stock por item, genera `id_pedido = PED-{chatId}-{timestamp}`, calcula fecha/hora Colombia (UTC-5) |
-| `Validar Stock` | IF | `$json.valido is true` |
-| `Registrar Pedidos` | googleSheets (append) | Inserta en PEDIDOS con todos los campos del pedido |
-| `Stock Descuento` | Code | Mapea cada item a `{id_producto, stock_nuevo, row_number}` |
-| `Descontar los stoks` | googleSheets (update) | Actualiza MENU por `id_producto` con nuevo stock |
-| `Limpiar Carrito SESSION` | googleSheets (update) | `pantalla_actual=VER_CATEGORIAS`, `carrito_temporal={}` |
-| `Confirmar al cliente` | Telegram | Mensaje al cliente con resumen del pedido en Markdown |
-| `Stock Insuficientes` | Telegram | Mensaje de error de stock al usuario |
-| `Guardar HIstorial` | googleSheets (update) | `pantalla_actual=VER_CATEGORIAS`, preserva `carrito_temporal` actual |
-| `Mostrar categoría de Nuevo` | Telegram | Los 4 botones de categoría |
-| `Update SESSION` | googleSheets (update) | `pantalla_actual=VER_CATEGORIAS`, `carrito_temporal={}` |
-| `Aviso Cancelacion` | Telegram | *"Pedido cancelado. Escribe /start para hacer un nuevo pedido"* |
-
-### Decisiones técnicas clave
-
-- **Generación de ID:** `PED-{chatId}-{timestamp}` garantiza unicidad sin autoincrement.
-- **Zona horaria Colombia:** `Date.now() - 5 * 60 * 60 * 1000` para fecha/hora correcta.
-- **Descuento de stock por lotes:** `Stock Descuento` convierte el array en múltiples items; `Descontar los stoks` procesa cada uno como update separado por `id_producto`.
+| Flujo | Trigger | Responsabilidad |
+|-------|---------|----------------|
+| Confirmación del pedido | Callback de Telegram (`CONFIRMAR / SEGUIR / CANCELAR`) | Validación de stock, registro y despacho del pedido *(documentado en Módulo 02)* |
+| Workflow Cocinero | Mensaje de Telegram (`/estado`, `/ayuda`) | Actualizar estado de pedidos y notificar al cliente |
+| Reporte Diario | Schedule Trigger (7:00 AM diario) | Generar y enviar métricas del día al administrador |
 
 ---
 
-## Módulo 04 — Reportes y Ventas
+### Flujo 2 — Workflow Cocinero
 
-**Archivo:** `Workflow/modulos/04_Reportes_Ventas.json`  
-**Responsabilidad:** Reporte diario automático a las 7 AM con métricas del día.
+**Tipo:** Workflow independiente — no conectado al Telegram Disparador principal.  
+**Responsabilidad:** Permite al personal de cocina actualizar el estado de un pedido via Telegram. Al actualizar, notifica automáticamente al cliente.
 
-### Nodos
+#### Trigger
+
+`Telegram Disparador Cocinero` — Webhook ID: `cb5135a2-2dcc-4f9d-8615-4b696728eb59`, escucha solo `message`.
+
+#### Comandos disponibles
+
+| Comando | Uso |
+|---------|-----|
+| `/estado [ID] [NuevoEstado]` | Actualiza el estado de un pedido |
+| `/ayuda` | Muestra la guía de uso |
+
+**Estados válidos:** `Recibido` / `Preparación` / `En camino` / `Entregado`
+
+#### Flujo completo
+
+```
+Telegram Disparador Cocinero
+  └─→ Detectar Comando (Switch por primera palabra)
+        Output 0 (/estado) → Parsear comando/estado
+                              → Validar comando (IF: valido == true)
+                                  TRUE  → Buscar pedido (Get row PEDIDOS por id_pepido)
+                                            → EL pedido existe? (IF: id_pepido not empty)
+                                                TRUE  → Actualizar Estado PEDIDOS
+                                                          → Preparar Notificaciones
+                                                          → Actualizacion Pedido (→ cliente)
+                                                          → Notificar al cliente (→ admin confirma)
+                                                FALSE → Pedido No Encontrado (→ admin)
+                                  FALSE → Error Formato Inválido (→ admin)
+        Output 1 (/ayuda)  → Guia de Uso (→ cocinero)
+```
+
+#### Nodos
 
 | Nodo | Tipo | Descripción |
 |------|------|-------------|
-| `Schedule Trigger` | scheduleTrigger | Cron: todos los días a las 7:00 AM |
-| `Leer Pedidos` | googleSheets (getAll) | Lee todas las filas de PEDIDOS sin filtro |
-| `Métricas Del dia` | Code | Filtra pedidos del día actual (UTC-5), calcula total vendido, producto estrella y hora pico |
-| `Actualizacion Reporte` | Telegram | Envía reporte al admin (`chat_id: 8907728238`) con métricas formateadas |
+| `Telegram Disparador Cocinero` | telegramTrigger | Webhook que escucha `message`. Mismo bot, lógica separada |
+| `Detectar Comando` | Switch | Detecta la primera palabra del texto (`split(' ')[0]`). Rama 0 = `/estado`, rama 1 = `/ayuda` |
+| `Parsear comando/estado` | Code | Divide el mensaje, extrae `id_pedido` (partes[1]) y `nuevo_estado` (partes[2..].join(' ')), valida que el estado esté en la lista válida |
+| `Validar comando` | IF | `$json.valido is true` |
+| `Buscar pedido` | googleSheets (get) | Filtra PEDIDOS por `id_pepido == String($json.id_pedido).trim()`. `alwaysOutputData: true` |
+| `EL pedido existe?` | IF | `$json.id_pepido is not empty` |
+| `Actualizar Estado PEDIDOS` | googleSheets (update) | Actualiza PEDIDOS por `id_pepido`, solo modifica el campo `estado` |
+| `Preparar Notificaciones` | Code | Construye `mensaje_cliente` con emoji según estado, construye `mensaje_admin` de confirmación, lee `id_usuario` del nodo Buscar pedido |
+| `Actualizacion Pedido` | Telegram | Envía `mensaje_cliente` al `id_usuario` (el cliente) |
+| `Notificar al cliente` | Telegram | Envía `mensaje_admin` al cocinero como confirmación |
+| `Pedido No Encontrado` | Telegram | Envía al admin: *"❌ Pedido X no encontrado"* |
+| `Error Formato Inválido` | Telegram | Envía al admin el `mensaje_error` del parser |
+| `Guia de Uso` | Telegram | Envía instrucciones completas del comando `/estado` al cocinero |
 
-### Formato del reporte al administrador
+#### Emojis de estado (Preparar Notificaciones)
+
+| Estado | Emoji |
+|--------|-------|
+| Recibido | 📋 |
+| Preparación | 👨‍🍳 |
+| En camino | 🛵 |
+| Entregado | ✅ |
+
+#### Texto de la guía (`/ayuda`)
 
 ```
-📊 Reporte Diario — [FECHA]
+👨‍🍳 Guía Rápida - Cocina
 
-💰 Total vendido: $XX.XXX
-⭐ Producto estrella: [nombre] (N unidades)
-⏰ Hora pico: HH:00 - HH:59 (N pedidos)
-📦 Total de pedidos: N
+Para cambiar el estado de un pedido escribe:
+/estado [ID] [Estado]
+
+Ejemplo: /estado PED-123-456 Preparación
+
+Estados válidos:
+- Recibido
+- Preparación
+- En camino
+- Entregado
+
+El ID del pedido lo encuentras en la hoja PEDIDOS de Google Sheets.
+Escribe /ayuda para ver esto de nuevo.
+```
+
+---
+
+### Flujo 3 — Reporte Diario
+
+**Tipo:** Workflow independiente — trigger por Schedule, no por Telegram.  
+**Responsabilidad:** Genera y envía automáticamente un reporte de ventas del día al administrador todos los días a las 7:00 AM.
+
+#### Flujo completo
+
+```
+Schedule Trigger (7 AM diario)
+  └─→ Leer Pedidos (Get all rows PEDIDOS sin filtro)
+        └─→ Code in JavaScript (calcula métricas del día)
+              └─→ Actualizacion Pedido1 (Telegram → admin chat_id: 8907728238)
+```
+
+#### Nodos
+
+| Nodo | Tipo | Descripción |
+|------|------|-------------|
+| `Schedule Trigger` | scheduleTrigger | Cron: `triggerAtHour: 7`, todos los días |
+| `Leer Pedidos` | googleSheets (getAll) | Lee todas las filas de PEDIDOS sin filtro. `alwaysOutputData: true` |
+| `Code in JavaScript` | Code | Filtra pedidos del día (`new Date().toISOString().split('T')[0]`), calcula `totalVendido`, `productoEstrella` (parsea `detalle_pedido` formato `nombre x cantidad \| ...`), `horaPico` (agrupa por hora) |
+| `Actualizacion Pedido1` | Telegram | Envía el reporte al admin (`chat_id: 8907728238`) |
+
+#### Lógica del Code node
+
+1. Filtra pedidos donde `fecha == hoy` (ISO date string).
+2. Si no hay pedidos: envía mensaje *"No hubo pedidos hoy"*.
+3. `totalVendido` — suma de `total_pagar` de los pedidos del día.
+4. `productoEstrella` — parsea `detalle_pedido` (`nombre x cantidad | ...`), suma cantidades por producto, devuelve el más vendido.
+5. `horaPico` — agrupa pedidos por la hora (`hora.split(':')[0]`), devuelve la hora con más pedidos.
+
+#### Formato del reporte
+
+```
+📊 Reporte Diario — YYYY-MM-DD
+
+💰 Total vendido: $X
+📦 Pedidos procesados: N
+⭐ Producto estrella: NombreProducto (X unidades)
+⏰ Hora pico: HH:00 (N pedidos)
+
+Generado automáticamente por DeliveryBot
 ```

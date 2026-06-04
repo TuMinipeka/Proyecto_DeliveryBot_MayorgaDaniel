@@ -4,7 +4,7 @@ Sistema de automatización de pedidos de cafetería institucional basado en **n8
 
 ## Descripción
 
-DeliveryBot convierte a Telegram en una terminal de pedidos inteligente. Los empleados o estudiantes consultan el menú, arman su carrito y reciben notificaciones en tiempo real sobre el estado de su pedido. La administración recibe reportes diarios automáticos de ventas.
+DeliveryBot convierte a Telegram en una terminal de pedidos inteligente. Los empleados o estudiantes consultan el menú, arman su carrito y reciben notificaciones en tiempo real sobre el estado de su pedido. El personal de cocina gestiona los estados de los pedidos con comandos desde su propio bot. La administración recibe reportes diarios automáticos de ventas.
 
 ## Estructura del Proyecto
 
@@ -56,12 +56,23 @@ proyecto/
 
 ## Módulos
 
-| # | Módulo | Nodos principales |
-|---|--------|------------------|
-| 01 | Menú y Navegación | Telegram Disparador, Ajuste Variables, Leer estado Usuario, Router De Estado |
-| 02 | Carrito y Pedidos | Leer MENU, Construir lista, Fusionar Carrito, Procesar Selección, Resumen Carrito |
-| 03 | Gestor de Estados | Switch CONFIRMAR/SEGUIR/CANCELAR, Validar Stock, Registrar Pedidos, Descontar stock |
-| 04 | Reportes y Ventas | Schedule Trigger (7 AM), Métricas Del dia, Notificar admin |
+| # | Módulo | Tipo | Trigger | Nodos principales |
+|---|--------|------|---------|------------------|
+| 01 | Menú y Navegación | Workflow principal | Telegram (mensaje) | Telegram Disparador, Ajuste Variables, Leer estado Usuario, Router De Estado |
+| 02 | Carrito y Pedidos | Workflow principal | Telegram (mensaje) | Leer MENU, Construir lista, Fusionar Carrito, Procesar Selección, Resumen Carrito |
+| 03 | Workflow Cocinero | **Independiente** | Telegram Disparador Cocinero | Detectar Comando, Parsear comando/estado, Validar comando, Buscar pedido, Actualizar Estado PEDIDOS, Notificar al cliente |
+| 04 | Reporte Diario | **Independiente** | Schedule Trigger (7 AM diario) | Leer Pedidos, Code in JavaScript, Actualizacion Pedido1 |
+
+### Módulo 03 — Workflow Cocinero
+
+Workflow independiente para el personal de cocina. Permite actualizar el estado de un pedido vía Telegram y notifica automáticamente al cliente.
+
+- **Comandos:** `/estado [ID] [NuevoEstado]`, `/ayuda`
+- **Estados válidos:** `Recibido` → `Preparación` → `En camino` → `Entregado`
+
+### Módulo 04 — Reporte Diario
+
+Workflow independiente con Schedule Trigger. Genera y envía automáticamente un reporte de ventas del día al administrador todos los días a las 7:00 AM.
 
 ## Instalación Rápida
 

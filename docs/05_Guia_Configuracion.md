@@ -51,11 +51,14 @@
 3. Activar el workflow.
 
 ### Opción B — Módulos separados (recomendado para revisión)
-1. Importar cada archivo de `Workflow/modulos/` en orden:
+1. Importar los **3 archivos** de `Workflow/modulos/` en orden (no 4 — el Reporte Diario vive dentro del módulo 03):
    - `01_Menu_Navegacion.json`
    - `02_Carrito_Pedidos.json`
-   - `03_Gestor_Estados.json`
-   - `04_Reportes_Ventas.json`
+   - `03_Gestor_Estados.json` ← contiene 3 flujos: confirmación del cliente + Workflow Cocinero + Reporte Diario
+
+> **Nota — Workflow Cocinero:** usa el mismo bot de Telegram que el flujo principal, pero su trigger (`Telegram Disparador Cocinero`) escucha únicamente mensajes de texto (`message`), no callbacks de botones inline. Ambos triggers pueden coexistir en el mismo bot sin conflicto.
+
+> **Nota — Reporte Diario:** el Schedule Trigger **no se activa automáticamente** al importar. Después de importar `03_Gestor_Estados.json`, abrir el canvas en n8n, localizar el nodo `Schedule Trigger (7 AM diario)` y activar el workflow manualmente para que comience a ejecutarse cada día a las 7:00 AM.
 
 ---
 
