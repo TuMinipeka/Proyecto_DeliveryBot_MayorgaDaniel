@@ -49,8 +49,6 @@ Al escoger la comida con opciones de 1 y 2, n8n realiza el siguiente flujo
 
 Y este da el siguiente mensaje en telegram cuando el flujo termina.
 
-![Mensaje de cantidad de unidades a escoger](assets/capturas_modulo_02/mensajetelegramcomida.png)
-
 ![Mensaje de mi carrito para confirmar, seguir comprando o cancelar mi pedido](assets/capturas_modulo_02/tucarritotelegram.png)
 
 
