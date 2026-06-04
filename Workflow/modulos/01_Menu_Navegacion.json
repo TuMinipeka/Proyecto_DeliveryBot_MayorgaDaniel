@@ -1,0 +1,23 @@
+{
+  "name": "01 - Menu y Navegacion",
+  "nodes": [],
+  "connections": {},
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "meta": {
+    "description": "Módulo de entrada al sistema. Maneja autenticación/registro de usuarios y presentación del menú de categorías.",
+    "nodos": [
+      "Telegram Disparador",
+      "Ajuste Variables",
+      "Leer estado Usuario",
+      "If1 (validar /start)",
+      "If (usuario existe)",
+      "Reset Session",
+      "Registro Usuario",
+      "Crear session",
+      "Categorias",
+      "Error Enviar /start",
+      "Router De Estado"
+    ]
+  }
+}

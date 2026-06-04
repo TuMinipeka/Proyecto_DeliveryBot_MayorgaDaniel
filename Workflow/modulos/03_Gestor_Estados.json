@@ -1,0 +1,26 @@
+{
+  "name": "03 - Gestor de Estados",
+  "nodes": [],
+  "connections": {},
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "meta": {
+    "description": "Módulo de procesamiento de confirmación, validación de stock, registro del pedido, descuento de inventario y cancelación.",
+    "nodos": [
+      "Switch (CONFIRMAR/SEGUIR/CANCELAR)",
+      "Lectura stock Actual",
+      "Confirmar Stock + Generar Pedido",
+      "Validar Stock",
+      "Registrar Pedidos",
+      "Stock Descuento",
+      "Descontar los stoks",
+      "Limpiar Carrito SESSION",
+      "Confirmar al cliente",
+      "Guardar HIstorial",
+      "Mostrar categoría de Nuevo",
+      "Update SESSION",
+      "Aviso Cancelacion",
+      "Stock Insuficientes"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "02 - Carrito y Pedidos",
+  "nodes": [],
+  "connections": {},
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "meta": {
+    "description": "Módulo de navegación de productos, selección, acumulación en carrito y confirmación del pedido.",
+    "nodos": [
+      "Leer MENU",
+      "Construir lista De Productos",
+      "Fusionar Carrito",
+      "Mostrar Comidas",
+      "Guardar Estado (Carrito)",
+      "Procesar Selección Comida",
+      "Validar Seleccion",
+      "Guardar Siguiente Rama",
+      "Comida seleccionada + Cantidad",
+      "Procesar Cantidad",
+      "Validar cantidad",
+      "Error Número Inválido",
+      "Error Cantidad Inválida",
+      "Guardar Estado CONFIRMAR",
+      "Resumen Carrito"
+    ]
+  }
+}

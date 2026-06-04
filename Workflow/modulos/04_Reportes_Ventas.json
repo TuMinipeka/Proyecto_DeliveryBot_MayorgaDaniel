@@ -1,0 +1,17 @@
+{
+  "name": "04 - Reportes y Ventas",
+  "nodes": [],
+  "connections": {},
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "meta": {
+    "description": "Módulo de reporte diario automático a las 7 AM con métricas del día para el administrador.",
+    "nodos": [
+      "Schedule Trigger (7 AM)",
+      "Leer Pedidos",
+      "Métricas Del dia",
+      "Actualizacion Reporte",
+      "Notificar admin"
+    ]
+  }
+}

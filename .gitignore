@@ -1,0 +1,22 @@
+# Credenciales y entornos
+.env
+*.env.local
+secrets/
+
+# Sistemas operativos
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node
+node_modules/
+npm-debug.log
+
+# Temporales
+*.tmp
+*.bak
