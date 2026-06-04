@@ -6,14 +6,16 @@
 
 | # | Acción | Resultado esperado | Estado |
 |---|--------|-------------------|--------|
-| 1.1 | Usuario nuevo envía `/start` | Bot registra usuario en USUARIOS, crea sesión en SESSION, muestra 4 categorías | ⬜ Pendiente |
+| 1.1 | Usuario nuevo envía `/start` | Bot registra usuario en USUARIOS, crea sesión en SESSION, muestra 4 categorías (Bebidas - Postres - Almuerzos - Comidas) | ⬜ Pendiente |
 | 1.2 | Usuario existente envía `/start` | Bot resetea la sesión (carrito vacío) y muestra 4 categorías | ⬜ Pendiente |
 | 1.3 | Usuario envía texto aleatorio sin sesión | Bot responde: *"Para iniciar tu pedido, envía /start 🚀"* | ⬜ Pendiente |
 
 ### Evidencias
-> Agregar capturas en `docs/assets/capturas_modulo_01/`
+![DEcision de flujo al pulsar /start ](/docs/assets/capturas_modulo_01/flujostartn8n.png)
 
----
+Mensaje reflejado en el Bot de Telegram
+
+![Bot de Telegram respondiendo al /start](assets/capturas_modulo_01/bottelegramstart.png)
 
 ## Módulo 02 — Carrito y Pedidos
 
@@ -47,7 +49,7 @@
 | 3.6 | Verificar hoja SESSION tras confirmación | `pantalla_actual=VER_CATEGORIAS`, `carrito_temporal={}` | ⬜ Pendiente |
 
 ### Evidencias
-> Agregar capturas en `docs/assets/capturas_modulo_01/flujostartn8n.png`
+![DEcision de flujo al pulsar /start ](/docs/assets/capturas_modulo_01/flujostartn8n.png)
 
 ---
 
