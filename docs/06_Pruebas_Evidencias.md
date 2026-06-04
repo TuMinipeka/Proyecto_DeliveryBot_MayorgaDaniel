@@ -17,6 +17,12 @@ Mensaje reflejado en el Bot de Telegram
 
 ![Bot de Telegram respondiendo al /start](assets/capturas_modulo_01/bottelegramstart.png)
 
+Se guarda dentro del google Sheets, Junto a la sesion guardada
+
+![Evidencia de info guardada dentro de la tabla de Google Sheets](assets/capturas_modulo_01/googlesheetsconusuario.png)
+
+![Evidencia de Session modificado al usuario solo escribir /start (u cualquier otro mensaje con el ChatBot)](assets/capturas_modulo_01/session1.png)
+
 ## Módulo 02 — Carrito y Pedidos
 
 ### Casos de prueba
