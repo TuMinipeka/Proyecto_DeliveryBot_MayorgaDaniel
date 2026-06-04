@@ -43,7 +43,7 @@ Al escoger catalogo (Bebida)
 
 ![Pick al catalogo del bot de telegram](assets/capturas_modulo_02/escogercatalogo.png)
 
-Al escoger la comida, n8n realiza el siguiente flujo
+Al escoger la comida con opciones de 1 y 2, n8n realiza el siguiente flujo
 
 ![Flujo de trabajo formado por n8n al momento de escoger la bebida](assets/capturas_modulo_02/seleccioncomidaflujon8n.png)
 
