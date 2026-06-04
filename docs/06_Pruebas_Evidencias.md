@@ -37,9 +37,22 @@ Se guarda dentro del google Sheets, Junto a la sesion guardada
 | 2.6 | Usuario agrega productos de 2 categorías distintas | El carrito acumula ambos productos correctamente | ⬜ Pendiente |
 
 ### Evidencias
-> Agregar capturas en `docs/assets/capturas_modulo_02/`
+![Flujo de trabajo al escoger bebida en el catalogo](assets/capturas_modulo_02/flujon8ncategoria.png)
 
----
+Al escoger catalogo (Bebida)
+
+![Pick al catalogo del bot de telegram](assets/capturas_modulo_02/escogercatalogo.png)
+
+Al escoger la comida, n8n realiza el siguiente flujo
+
+![Flujo de trabajo formado por n8n al momento de escoger la bebida](assets/capturas_modulo_02/seleccioncomidaflujon8n.png)
+
+Y este da el siguiente mensaje en telegram cuando el flujo termina.
+
+![Mensaje de cantidad de unidades a escoger](assets/capturas_modulo_02/mensajetelegramcomida.png)
+
+![Mensaje de mi carrito para confirmar, seguir comprando o cancelar mi pedido](assets/capturas_modulo_02/tucarritotelegram.png)
+
 
 ## Módulo 03 — Gestor de Estados
 
