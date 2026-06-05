@@ -103,7 +103,13 @@ Al cancelar carrito, este solo te dira que el pedido ha sido canselado.
 | 4.3 | Reporte con múltiples pedidos | Total vendido, producto estrella y hora pico calculados correctamente | ⬜ Pendiente |
 
 ### Evidencias
-> Agregar capturas en `docs/assets/capturas_modulo_04/`
+Workflow dentro de n8n
+
+![Flujo principal del reporte del dia en n8n](assets/capturas_modulo_04/flujotrabajon8nreportesdiarios.png)
+
+Mensaje del reoprte del dia
+
+![Mensaje reporte diario con el bor de telegram](assets/capturas_modulo_04/reportetelegram.png)
 
 ---
 
