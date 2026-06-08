@@ -96,6 +96,8 @@ Si no hay suficientes Coca Colas dentro del Stock.
 ![Mensaje que envia el flujo por medio del bot de telegram al aver unidades insufucientes dentro del stock](assets/capturas_modulo_03/salida0stock.png)
 
 Al cancelar carrito, este solo te dira que el pedido ha sido canselado.
+- Para verr el historial Usas /historial:
+![alt text](assets/capturas_modulo_02/historial.png)
 
 ## Flujo del Cocinero — Workflow Gestor de Estados (Módulo 03)
 
