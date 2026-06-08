@@ -67,10 +67,10 @@ Al ingresar la cantidad (3), el bot muestra el resumen del carrito con los 3 bot
 | 3.1 | Usuario presiona "✅ Confirmar" con stock disponible | Bot confirma al usuario ("¡Pedido confirmado! N° PED-xxx") y envía notificación al cocinero ("🔔 Nuevo pedido"); pedido se registra en PEDIDOS | ✅ Aprobado |
 | 3.2 | Usuario presiona "✅ Confirmar" con stock insuficiente | Bot responde "⚠️ Stock insuficiente: ❌ [producto]: solo quedan 0 unidades (pediste 2). Modifica tu carrito o escribe /start para reiniciar." | ✅ Aprobado |
 | 3.3 | Usuario presiona "➕ Seguir comprando" | Bot muestra el resumen del carrito actual y luego las 4 categorías nuevamente (Bebidas - Postres - Comidas - Almuerzos) | ✅ Aprobado |
-| 3.4 | Usuario presiona "❌ Cancelar pedido" | Bot limpia el carrito, muestra aviso de cancelación | ⬜ Pendiente |
+| 3.4 | Usuario presiona "❌ Cancelar pedido" | Bot limpia el carrito, muestra aviso de cancelación | ✅ Aprobado |
 | 3.5 | Verificar hoja PEDIDOS tras confirmación | Se registra fila con: `id_pedido`, `id_usuario`, `detalle_pedido` (ej: Coca Cola x3), `total_pagar` (ej: 19500), `estado=Recibido`, `fecha`, `hora` | ✅ Aprobado |
 | 3.6 | Verificar hoja SESSION al presionar "✅ Confirmar" | `pantalla_actual=CONFIRMAR_PEDIDO`, `carrito_temporal` contiene los ítems del pedido activo | ✅ Aprobado |
-| 3.7 | Cocinero envía `/estado PED-xxx-xxx Preparación` | Bot actualiza estado en PEDIDOS, cliente recibe notificación con emoji 👨‍🍳, cocinero recibe confirmación | ⬜ Pendiente |
+| 3.7 | Cocinero envía `/estado PED-xxx-xxx Preparación` | Bot actualiza estado en PEDIDOS, cliente recibe notificación con emoji 👨‍🍳, cocinero recibe confirmación | ✅ Aprobado |
 | 3.8 | Cocinero envía `/estado` con ID inexistente | Bot responde "❌ Pedido X no encontrado" al cocinero | ✅ Aprobado |
 | 3.9 | Cocinero envía `/ayuda` | Bot muestra la guía completa de comandos al cocinero | ✅ Aprobado |
 
