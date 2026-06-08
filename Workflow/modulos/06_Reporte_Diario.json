@@ -1,0 +1,19 @@
+{
+  "name": "06 - Reporte Diario (Reportes y Ventas)",
+  "nodes": [],
+  "connections": {},
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "meta": {
+    "description": "Workflow independiente con Schedule Trigger. Genera y envía automáticamente un reporte de ventas del día al administrador todos los días a las 7:00 AM. Calcula total vendido, pedidos procesados, producto estrella y hora pico.",
+    "tipo": "workflow_independiente",
+    "trigger": "Schedule Trigger — 7:00 AM diario",
+    "admin_chat_id": "8907728238",
+    "nodos": [
+      "Schedule Trigger (7 AM diario)",
+      "Leer Pedidos",
+      "Code in JavaScript",
+      "Actualizacion Pedido1"
+    ]
+  }
+}
