@@ -106,6 +106,9 @@ Permite actualizar el estado de los pedidos en tiempo real y notifica
 automáticamente al cliente cuando su pedido cambia de estado.
 
 ### Nodos del flujo
+
+![Flujo en n8n](assets/capturas_modulo_03/flujococineron8n.png)
+
 1. **Telegram Disparador Cocinero** — escucha mensajes del bot de cocina
 2. **Detectar Comando** — Switch que identifica `/estado`, `/ayuda`, o comando desconocido
 3. **Parsear comando/estado** — Code node que extrae el ID del pedido y el nuevo estado del texto
@@ -129,18 +132,20 @@ automáticamente al cliente cuando su pedido cambia de estado.
 ### Evidencias requeridas — Workflow Cocinero
 Agregar capturas en `docs/assets/capturas_modulo_03/`
 
-**3.7** — Toma 3 capturas:
+**3.7** 
 - Telegram del cocinero: muestra el comando `/estado PED-xxx Preparación` enviado y la confirmación recibida del bot
+![EJecutar /ayuda dentro del bot de telegram](assets/capturas_modulo_03/ayuda.png)
 - Telegram del cliente: muestra la notificación automática con emoji 👨‍🍳 y el ID del pedido
+![alt text](assets/capturas_modulo_03/pedidoREcibidococinero.png)
 - Google Sheets hoja PEDIDOS: muestra el campo `estado` actualizado a "Preparación"
-
-**3.8** — Toma 1 captura:
+![alt text](assets/capturas_modulo_03/shetsestadorecibido.png)
+**3.8** 
 - Telegram del cocinero: muestra el mensaje "❌ Pedido X no encontrado"
+![alt text](assets/capturas_modulo_03/pedidonoencontrado.png)
 
-**3.9** — Toma 1 captura:
-- Telegram del cocinero: muestra la guía completa que devuelve el bot con todos los comandos
-
-
+**3.9** — 
+- Telegram del cocinero: muestra la guía que ya se ha entregado el pedido
+![alt text](assets/capturas_modulo_03/entregadoBot.png)
 ---
 
 ## Módulo 04 — Reportes y Ventas
@@ -163,13 +168,3 @@ Mensaje del reoprte del dia
 ![Mensaje reporte diario con el bor de telegram](assets/capturas_modulo_04/reportetelegram.png)
 
 ---
-
-## Resumen General
-
-| Módulo | Total pruebas | Aprobadas | Fallidas | Pendientes |
-|--------|--------------|-----------|---------|-----------|
-| 01 — Menú y Navegación | 3 | 2 | 0 | 1 |
-| 02 — Carrito y Pedidos | 6 | 5 | 0 | 1 |
-| 03 — Gestor de Estados | 9 | 6 | 0 | 3 |
-| 04 — Reportes y Ventas | 3 | 2 | 0 | 1 |
-| **Total** | **21** | **15** | **0** | **6** |
