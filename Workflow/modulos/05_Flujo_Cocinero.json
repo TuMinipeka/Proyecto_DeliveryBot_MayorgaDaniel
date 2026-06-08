@@ -1,0 +1,32 @@
+{
+  "name": "05 - Flujo del Cocinero (Gestor de Estados)",
+  "nodes": [],
+  "connections": {},
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "meta": {
+    "description": "Workflow independiente con Telegram Trigger. El personal de cocina envía comandos por Telegram para actualizar el estado de los pedidos en tiempo real. Notifica automáticamente al cliente cuando su pedido cambia de estado.",
+    "tipo": "workflow_independiente",
+    "trigger": "Telegram Disparador Cocinero — mensaje entrante al bot de cocina",
+    "comandos": [
+      "/estado [ID] [NuevoEstado] — actualiza el estado de un pedido en PEDIDOS y notifica al cliente",
+      "/ayuda — muestra la guía de comandos disponibles"
+    ],
+    "estados_validos": ["Recibido", "Preparación", "En camino", "Entregado"],
+    "nodos": [
+      "Telegram Disparador Cocinero",
+      "Detectar Comando",
+      "Parsear comando/estado",
+      "Validar comando",
+      "Buscar pedido",
+      "EL pedido existe?",
+      "Actualizar Estado PEDIDOS",
+      "Preparar Notificaciones",
+      "Actualizacion Pedido",
+      "Notificar al cliente",
+      "Guia de Uso",
+      "Error Formato Inválido",
+      "Pedido No Encontrado"
+    ]
+  }
+}

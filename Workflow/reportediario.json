@@ -1,0 +1,140 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "chatId": "=8907728238",
+        "text": "={{ $json.mensaje }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "Markdown"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -3136,
+        2816
+      ],
+      "id": "efe7ee6a-4e71-46f6-9b39-5464ff24685b",
+      "name": "Actualizacion Pedido1",
+      "webhookId": "a2e77e95-ba38-435b-bce2-1ba3e93e05bd",
+      "alwaysOutputData": false,
+      "credentials": {
+        "telegramApi": {
+          "id": "wlHAIXNKATZGf4dx",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const pedidos = $input.all();\n\nconst hoy = new Date().toISOString().split('T')[0];\n\nconst pedidosHoy = pedidos.filter(p => p.json.fecha === hoy);\n\nif (pedidosHoy.length === 0) {\n  return [{\n    json: {\n      hay_pedidos: false,\n      mensaje: `📊 Reporte Diario — ${hoy}\\n\\n⚠️ No hubo pedidos hoy.`\n    }\n  }];\n}\n\nconst totalVendido = pedidosHoy.reduce((sum, p) => {\n  return sum + Number(p.json.total_pagar || 0);\n}, 0);\n\nconst conteoProductos = {};\npedidosHoy.forEach(p => {\n  const detalle = p.json.detalle_pedido || '';\n  const items = detalle.split(' | ');\n  items.forEach(item => {\n    const partes = item.trim().split(' x');\n    if (partes.length >= 2) {\n      const nombre = partes[0].trim();\n      const cantidad = Number(partes[1]) || 1;\n      conteoProductos[nombre] = (conteoProductos[nombre] || 0) + cantidad;\n    }\n  });\n});\n\nconst productoEstrella = Object.entries(conteoProductos)\n  .sort((a, b) => b[1] - a[1])[0];\n\nconst conteoPorHora = {};\npedidosHoy.forEach(p => {\n  const horaRaw = (p.json.hora || '00:00:00').split(':')[0].padStart(2, '0');\n  const hora = horaRaw + ':00';\n  conteoPorHora[hora] = (conteoPorHora[hora] || 0) + 1;\n});\n\nconst horaPico = Object.entries(conteoPorHora)\n  .sort((a, b) => b[1] - a[1])[0];\n\nconst mensaje = `📊 Reporte Diario — ${hoy}\\n\\n💰 Total vendido: $${totalVendido}\\n📦 Pedidos procesados: ${pedidosHoy.length}\\n⭐ Producto estrella: ${productoEstrella ? `${productoEstrella[0]} (${productoEstrella[1]} unidades)` : 'N/A'}\\n⏰ Hora pico: ${horaPico ? `${horaPico[0]} (${horaPico[1]} pedido)` : 'N/A'}\\n\\nGenerado automáticamente por DeliveryBot`;\n\nreturn [{\n  json: {\n    hay_pedidos: true,\n    mensaje: mensaje,\n    total_vendido: totalVendido,\n    pedidos_hoy: pedidosHoy.length,\n    producto_estrella: productoEstrella?.[0] || 'N/A',\n    hora_pico: horaPico?.[0] || 'N/A'\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3360,
+        2816
+      ],
+      "id": "b104a974-80b2-4817-b5c8-9be72a00bf71",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1hNSqj9dSELHYo_l9msficSonMdmhy5mvYlhzMZdDBD4",
+          "mode": "list",
+          "cachedResultName": "deliverybot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hNSqj9dSELHYo_l9msficSonMdmhy5mvYlhzMZdDBD4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 792717060,
+          "mode": "list",
+          "cachedResultName": "PEDIDOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hNSqj9dSELHYo_l9msficSonMdmhy5mvYlhzMZdDBD4/edit#gid=792717060"
+        },
+        "filtersUI": {
+          "values": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -3584,
+        2816
+      ],
+      "id": "76fc55de-ce01-47b4-b2fd-465ef4e6f922",
+      "name": "Leer Pedidos",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "F1mDXLGolfF5triT",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7,
+              "triggerAtMinute": {}
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -3808,
+        2816
+      ],
+      "id": "ad944253-e86b-44e1-814b-94f5f0ac9e76",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "connections": {
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Actualizacion Pedido1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Pedidos": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Leer Pedidos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6c490c5cb9267e9e1afc3fb43a5133cf70f41e1d04fdd74b0462dce451e513a5"
+  }
+}
