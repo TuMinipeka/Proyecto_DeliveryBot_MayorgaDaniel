@@ -33,8 +33,8 @@ Se guarda dentro del google Sheets, Junto a la sesion guardada
 | 2.2 | Usuario ingresa número de producto válido (ej: 1) | Bot confirma "✅ Seleccionaste: Coca Cola — Precio: $6500" y solicita cantidad | ✅ Aprobado |
 | 2.3 | Usuario ingresa número fuera de rango | Bot muestra error de selección inválida | ⬜ Pendiente |
 | 2.4 | Usuario ingresa cantidad válida (ej: 3) | Bot muestra resumen del carrito "Coca Cola x3 = $19500 — Total: $19500" con 3 botones (Confirmar / Seguir comprando / Cancelar) | ✅ Aprobado |
-| 2.5 | Usuario ingresa cantidad inválida (ej: "abc") | Bot muestra error de cantidad inválida | ⬜ Pendiente |
-| 2.6 | Usuario agrega productos de 2 categorías distintas | El carrito acumula ambos productos correctamente | ⬜ Pendiente |
+| 2.5 | Usuario ingresa cantidad inválida (ej: "abc") | Bot muestra error de cantidad inválida | ✅ Aprobado |
+| 2.6 | Usuario agrega productos de 2 categorías distintas | El carrito acumula ambos productos correctamente | ✅ Aprobado |
 
 ### Evidencias
 Flujo de trabajo en n8n al seleccionar una categoría:
@@ -71,8 +71,8 @@ Al ingresar la cantidad (3), el bot muestra el resumen del carrito con los 3 bot
 | 3.5 | Verificar hoja PEDIDOS tras confirmación | Se registra fila con: `id_pedido`, `id_usuario`, `detalle_pedido` (ej: Coca Cola x3), `total_pagar` (ej: 19500), `estado=Recibido`, `fecha`, `hora` | ✅ Aprobado |
 | 3.6 | Verificar hoja SESSION al presionar "✅ Confirmar" | `pantalla_actual=CONFIRMAR_PEDIDO`, `carrito_temporal` contiene los ítems del pedido activo | ✅ Aprobado |
 | 3.7 | Cocinero envía `/estado PED-xxx-xxx Preparación` | Bot actualiza estado en PEDIDOS, cliente recibe notificación con emoji 👨‍🍳, cocinero recibe confirmación | ⬜ Pendiente |
-| 3.8 | Cocinero envía `/estado` con ID inexistente | Bot responde "❌ Pedido X no encontrado" al cocinero | ⬜ Pendiente |
-| 3.9 | Cocinero envía `/ayuda` | Bot muestra la guía completa de comandos al cocinero | ⬜ Pendiente |
+| 3.8 | Cocinero envía `/estado` con ID inexistente | Bot responde "❌ Pedido X no encontrado" al cocinero | ✅ Aprobado |
+| 3.9 | Cocinero envía `/ayuda` | Bot muestra la guía completa de comandos al cocinero | ✅ Aprobado |
 
 ### Evidencias
 Al darle click al boton CONFIRMAR:
@@ -123,13 +123,3 @@ Mensaje del reoprte del dia
 ![Mensaje reporte diario con el bor de telegram](assets/capturas_modulo_04/reportetelegram.png)
 
 ---
-
-## Resumen General
-
-| Módulo | Total pruebas | Aprobadas | Fallidas | Pendientes |
-|--------|--------------|-----------|---------|-----------|
-| 01 — Menú y Navegación | 3 | 2 | 0 | 1 |
-| 02 — Carrito y Pedidos | 6 | 3 | 0 | 3 |
-| 03 — Gestor de Estados | 9 | 5 | 0 | 4 |
-| 04 — Reportes y Ventas | 3 | 2 | 0 | 1 |
-| **Total** | **21** | **12** | **0** | **9** |
