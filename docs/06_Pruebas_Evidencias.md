@@ -70,9 +70,9 @@ Al ingresar la cantidad (3), el bot muestra el resumen del carrito con los 3 bot
 | 3.4 | Usuario presiona "❌ Cancelar pedido" | Bot limpia el carrito, muestra aviso de cancelación | ✅ Aprobado |
 | 3.5 | Verificar hoja PEDIDOS tras confirmación | Se registra fila con: `id_pedido`, `id_usuario`, `detalle_pedido` (ej: Coca Cola x3), `total_pagar` (ej: 19500), `estado=Recibido`, `fecha`, `hora` | ✅ Aprobado |
 | 3.6 | Verificar hoja SESSION al presionar "✅ Confirmar" | `pantalla_actual=CONFIRMAR_PEDIDO`, `carrito_temporal` contiene los ítems del pedido activo | ✅ Aprobado |
-| 3.7 | Cocinero envía `/estado PED-xxx-xxx Preparación` | Bot actualiza estado en PEDIDOS, cliente recibe notificación con emoji 👨‍🍳, cocinero recibe confirmación | ✅ Aprobado |
-| 3.8 | Cocinero envía `/estado` con ID inexistente | Bot responde "❌ Pedido X no encontrado" al cocinero | ✅ Aprobado |
-| 3.9 | Cocinero envía `/ayuda` | Bot muestra la guía completa de comandos al cocinero | ✅ Aprobado |
+| 3.7 | Cocinero envía `/estado PED-xxx-xxx Preparación` | Bot actualiza estado en PEDIDOS, cliente recibe notificación con emoji 👨‍🍳, cocinero recibe confirmación | ⬜ Pendiente |
+| 3.8 | Cocinero envía `/estado` con ID inexistente | Bot responde "❌ Pedido X no encontrado" al cocinero | ⬜ Pendiente |
+| 3.9 | Cocinero envía `/ayuda` | Bot muestra la guía completa de comandos al cocinero | ⬜ Pendiente |
 
 ### Evidencias
 Al darle click al boton CONFIRMAR:
@@ -97,8 +97,48 @@ Si no hay suficientes Coca Colas dentro del Stock.
 
 Al cancelar carrito, este solo te dira que el pedido ha sido canselado.
 
-Flujo de trabajo cocinero :
+## Flujo del Cocinero — Workflow Gestor de Estados (Módulo 03)
 
+### ¿Qué hace este flujo?
+El flujo del cocinero es un workflow independiente en el mismo canvas de n8n.
+Se activa cuando el personal de cocina envía comandos por Telegram al bot.
+Permite actualizar el estado de los pedidos en tiempo real y notifica
+automáticamente al cliente cuando su pedido cambia de estado.
+
+### Nodos del flujo
+1. **Telegram Disparador Cocinero** — escucha mensajes del bot de cocina
+2. **Detectar Comando** — Switch que identifica `/estado`, `/ayuda`, o comando desconocido
+3. **Parsear comando/estado** — Code node que extrae el ID del pedido y el nuevo estado del texto
+4. **Validar comando** — IF que verifica que el formato y estado sean válidos
+5. **Buscar pedido** — Google Sheets: busca el pedido por ID en la hoja PEDIDOS
+6. **EL pedido existe?** — IF que verifica si se encontró el pedido
+7. **Actualizar Estado PEDIDOS** — Google Sheets: actualiza el campo estado en PEDIDOS
+8. **Preparar Notificaciones** — Code node que construye mensajes para cliente y cocinero
+9. **Actualizacion Pedido** — Telegram: notifica al cliente con emoji según estado
+10. **Notificar al cliente** — Telegram: confirma al cocinero que el estado fue actualizado
+11. **Guia de Uso** — Telegram: responde `/ayuda` con instrucciones completas
+12. **Error Formato Inválido** — Telegram: informa al cocinero del error de formato
+13. **Pedido No Encontrado** — Telegram: informa que el ID del pedido no existe
+
+### Estados válidos
+- Recibido 📋
+- Preparación 👨‍🍳
+- En camino 🛵
+- Entregado ✅
+
+### Evidencias requeridas — Workflow Cocinero
+Agregar capturas en `docs/assets/capturas_modulo_03/`
+
+**3.7** — Toma 3 capturas:
+- Telegram del cocinero: muestra el comando `/estado PED-xxx Preparación` enviado y la confirmación recibida del bot
+- Telegram del cliente: muestra la notificación automática con emoji 👨‍🍳 y el ID del pedido
+- Google Sheets hoja PEDIDOS: muestra el campo `estado` actualizado a "Preparación"
+
+**3.8** — Toma 1 captura:
+- Telegram del cocinero: muestra el mensaje "❌ Pedido X no encontrado"
+
+**3.9** — Toma 1 captura:
+- Telegram del cocinero: muestra la guía completa que devuelve el bot con todos los comandos
 
 
 ---
@@ -123,3 +163,13 @@ Mensaje del reoprte del dia
 ![Mensaje reporte diario con el bor de telegram](assets/capturas_modulo_04/reportetelegram.png)
 
 ---
+
+## Resumen General
+
+| Módulo | Total pruebas | Aprobadas | Fallidas | Pendientes |
+|--------|--------------|-----------|---------|-----------|
+| 01 — Menú y Navegación | 3 | 2 | 0 | 1 |
+| 02 — Carrito y Pedidos | 6 | 5 | 0 | 1 |
+| 03 — Gestor de Estados | 9 | 6 | 0 | 3 |
+| 04 — Reportes y Ventas | 3 | 2 | 0 | 1 |
+| **Total** | **21** | **15** | **0** | **6** |
