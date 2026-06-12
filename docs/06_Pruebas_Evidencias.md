@@ -171,3 +171,37 @@ Mensaje del reoprte del dia
 ![Mensaje reporte diario con el bor de telegram](assets/capturas_modulo_04/reportetelegram.png)
 
 ---
+---
+
+## Módulo 05 — Implementado Evaluacion (Sistema de Alerta de Stock Crítico)
+
+### Casos de prueba
+
+| # | Acción | Resultado esperado | Estado |
+|---|--------|-------------------|--------|
+| 4.1 | Ejecución del Nodo If Valida si el stock es menor o igual a 3  | Admin recibe mensaje de reporte con el siguiente mensaje "El producto [Nombre] solo tiene [Cantidad] unidades. Favor reabastecer." | ✅ Aprobado |
+| 4.2 | Reporte con 0 unidades reflejado en el Google Sheets al confirmar Pedido | La tabla de Google Sheets se atualiza con el siguiente formato (Nombre - Agotado) | ✅ Aprobado |
+
+### Evidencias
+Workflow De del flujo agregado
+
+![alt text](assets/captura_modulo_05/workflowAgregado.png)
+
+Mensaje cuando el stock es menor o igual a 3 en Telegram
+
+![alt text](assets/captura_modulo_05/stockTelegram.png)
+
+Google Sheets actualizado si el stock es igual a 0
+
+![alt text](assets/captura_modulo_05/sheetsEvidencia.png)
+
+Evidencia Parametros If Node - Telegram Message
+![alt text](assets/captura_modulo_05/1.png)
+![alt text](assets/captura_modulo_05/2.png)
+
+Telegram Node
+
+![alt text](assets/captura_modulo_05/parametrotelegram.png)
+
+
+---

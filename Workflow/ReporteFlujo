@@ -1,0 +1,256 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "chatId": "={{ $('Ajuste Variables').item.json.chat_id }}",
+        "text": "=⚠️ ALERTA DE STOCK:\nEl producto {{ $('Confirmar Stock + Generar Pedido').item.json.items[0].nombre }} tiene {{ $('Confirmar Stock + Generar Pedido').item.json.actualizaciones_stock[0].stock_nuevo }} unidades. Favor reabastecer.  Actualización de Menú:",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "Markdown"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2416,
+        960
+      ],
+      "id": "075f64ed-fe36-4a3b-a8b1-6bfc7a540aaa",
+      "name": "Stock -3",
+      "webhookId": "29e8a60d-ec1c-4f72-b34b-71da5081e143",
+      "alwaysOutputData": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "1jQq3app6r42cu6i",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d5211fa5-7039-4a7a-b561-ec46eab7b771",
+              "leftValue": "={{ $('Confirmar Stock + Generar Pedido').item.json.actualizaciones_stock[0].stock_nuevo }}",
+              "rightValue": 3,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2160,
+        944
+      ],
+      "id": "17a19879-6c79-4f15-9641-842aff5860ed",
+      "name": "Stocks -3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d5211fa5-7039-4a7a-b561-ec46eab7b771",
+              "leftValue": "={{ $('Confirmar Stock + Generar Pedido').item.json.actualizaciones_stock[0].stock_nuevo }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2624,
+        960
+      ],
+      "id": "6fb562a2-f2ad-475a-9c48-a14672dc8bb9",
+      "name": "Validar Agotado"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1hNSqj9dSELHYo_l9msficSonMdmhy5mvYlhzMZdDBD4",
+          "mode": "list",
+          "cachedResultName": "deliverybot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hNSqj9dSELHYo_l9msficSonMdmhy5mvYlhzMZdDBD4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "MENU",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hNSqj9dSELHYo_l9msficSonMdmhy5mvYlhzMZdDBD4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id_producto": "={{ $('Stock Descuento').item.json.id_producto }}",
+            "stock": "={{ $('Stock Descuento').item.json.stock_nuevo }}",
+            "nombre": "={{ $('Validar Stock').item.json.items[0].nombre }} - AGOTADO"
+          },
+          "matchingColumns": [
+            "id_producto"
+          ],
+          "schema": [
+            {
+              "id": "id_producto",
+              "displayName": "id_producto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "nombre",
+              "displayName": "nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "descripcion",
+              "displayName": "descripcion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "precio",
+              "displayName": "precio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "categoria",
+              "displayName": "categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "stock",
+              "displayName": "stock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2864,
+        960
+      ],
+      "id": "96759411-d641-4f2a-8e2f-5fadf6f5ba52",
+      "name": "Agotado Nombre",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "6I9CzZZ3xIZUNzwW",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Stock -3": {
+      "main": [
+        [
+          {
+            "node": "Validar Agotado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stocks -3": {
+      "main": [
+        [
+          {
+            "node": "Stock -3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar Agotado": {
+      "main": [
+        [
+          {
+            "node": "Agotado Nombre",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agotado Nombre": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "81a7446204bb928074254dec04047cf78eac58f19cc7776fff88b5e3395b1951"
+  }
+}
